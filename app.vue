@@ -1,21 +1,19 @@
 <script setup>
-import { createClient } from '@supabase/supabase-js'
-const runtimeConfig = useRuntimeConfig();
-const supabase = createClient(runtimeConfig.public.SUPABASE_URL, runtimeConfig.public.SUPABASE_KEY)
-const countries = ref([])
+import { computed } from "vue";
+import useAuth from "@/composable/useAuth";
+import SignInGithub from "@/components/Feature/SignInGithub.vue";
+import ChatApp from "@/components/Feature/ChatApp.vue";
+import LogoutButton from "@/components/Feature/LogoutButton.vue";
 
-async function getCountries() {
-  const { data } = await supabase.from('countries').select()
-  countries.value = data
-}
-
-onMounted(() => {
-  getCountries()
-})
+const { session } = useAuth();
+const isLogin = computed(() => !!session.value);
 </script>
 
 <template>
-  <ul>
-    <li v-for="country in countries" :key="country.id">{{ country.name }}</li>
-  </ul>
+  <h1 class="text-3xl font-bold underline">
+    This is a Vue 3 + Vite + Supabase + Tailwind CSS + TypeScript + Chat
+  </h1>
+  <LogoutButton v-if="isLogin" />
+  <ChatApp v-if="isLogin" />
+  <SignInGithub v-else />
 </template>
