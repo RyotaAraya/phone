@@ -29,6 +29,7 @@
     "typescript": "^5.2.2"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.33.2"
+    "@supabase/supabase-js": "^2.33.2",
+    "dayjs": "^1.11.10"
   }
 }

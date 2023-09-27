@@ -6,6 +6,7 @@
       "baseUrl": ".",
       "@/types/*": ["./types/*"],
       "@/lib/*": ["./lib/*"],
+      "@/utils/*": ["./utils/*"],
       "@/composable/*": ["./composable/*"],
       "@/components/*": ["./components/*"]
     }

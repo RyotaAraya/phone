@@ -5,11 +5,10 @@ export default function useSupabase() {
   const nuxtApp = useNuxtApp();
   const supabase = nuxtApp.$supabase;
 
-  // テーブル名
-  const TABLE_NAME = "chat-app";
-
   const data = ref<Database[] | null>(null);
   const error = ref<Error | null>(null);
+
+  const TABLE_NAME = "chat-app";
 
   const fetchDatabase = async () => {
     try {
@@ -40,6 +39,7 @@ export default function useSupabase() {
   };
 
   return {
+    TABLE_NAME,
     data,
     error,
     fetchDatabase,

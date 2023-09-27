@@ -1,5 +1,5 @@
 import { Session } from "@supabase/supabase-js";
-import { onMounted, ref } from "vue";
+import { onMounted, ref, Ref, computed } from "vue";
 
 const useAuth = () => {
   const nuxtApp = useNuxtApp();
@@ -37,9 +37,11 @@ const useAuth = () => {
     }
   };
 
-  const profileFromGithub = ref({
-    nickName: session.value?.user?.user_metadata.user_name,
-    avatarUrl: session.value?.user?.user_metadata.avatar_url,
+  const profileFromGithub = computed(() => {
+    return {
+      nickName: session.value?.user?.user_metadata?.user_name || "",
+      avatarUrl: session.value?.user?.user_metadata?.avatar_url || "",
+    };
   });
 
   const signOut = async () => {
