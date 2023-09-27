@@ -25,6 +25,13 @@ export default function useSupabase() {
 
   onMounted(fetchDatabase); // Mounted時にデータをフェッチ
 
+  const deletedSupabaseData = async (id: string) => {
+    try {
+      await supabase.from(TABLE_NAME).delete().match({ id: id }); // 指定したIDの行を削除
+    } catch (error) {
+      console.error(error);
+    }
+  };
   const addSupabaseData = async ({
     message,
     avatarUrl,
@@ -44,5 +51,6 @@ export default function useSupabase() {
     error,
     fetchDatabase,
     addSupabaseData,
+    deletedSupabaseData,
   };
 }

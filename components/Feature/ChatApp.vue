@@ -13,7 +13,13 @@ const scrollAreaRef = ref(null);
 const inputText = ref("");
 const messages = ref<Database[]>([]);
 const { session: isLogin, profileFromGithub } = useAuth();
-const { data, fetchDatabase, addSupabaseData, TABLE_NAME } = useDatabase();
+const {
+  data,
+  fetchDatabase,
+  addSupabaseData,
+  deletedSupabaseData,
+  TABLE_NAME,
+} = useDatabase();
 
 const router = useRouter();
 
@@ -39,17 +45,19 @@ const fetchRealtimeData = () => {
         },
         (payload) => {
           if (payload.eventType === "INSERT") {
-            const currentMessage = messages.value;
             const { createdAt, id, message, avatarUrl, nickName } = payload.new;
-            console.log(typeof currentMessage);
             messages.value = [
               ...messages.value,
               { createdAt, id, message, avatarUrl, nickName },
             ];
           }
+          if (payload.eventType === "DELETE") {
+            const { id } = payload.old;
+            messages.value = messages.value.filter((item) => item.id !== id);
+          }
         },
       )
-      .subscribe();
+      .subscribe(); // subscribeで初期化作業が必要
 
     // この部分はNuxtでは使用しない。beforeUnmount内で実行する場合は、onBeforeUnmountフックを使用してください。
   } catch (error) {
@@ -75,6 +83,10 @@ const onSubmitNewMessage = (event) => {
   if (!inputText.value) return;
   addSupabaseData({ message: inputText.value, ...profileFromGithub.value });
   inputText.value = "";
+};
+
+const onMessageDeleted = async (id: string) => {
+  await deletedSupabaseData(id);
 };
 
 watch(messages, () => {
@@ -136,6 +148,13 @@ watch(messages, () => {
             <p class="absolute text-right text-[10px] -bottom-4 right-0">
               {{ dateToString(item.createdAt, "YYYY/MM/DD HH:mm") }}
             </p>
+            <button
+              class="absolute text-[10px] left-0 -bottom-4"
+              @click="onMessageDeleted(item.id)"
+              v-if="item.nickName === profileFromGithub.nickName"
+            >
+              削除
+            </button>
           </div>
         </div>
       </div>
