@@ -10,6 +10,7 @@ const nuxtApp = useNuxtApp();
 const supabase = nuxtApp.$supabase;
 
 const scrollAreaRef = ref(null);
+const editingMessageId = ref("");
 const inputText = ref("");
 const messages = ref<Database[]>([]);
 const { session: isLogin, profileFromGithub } = useAuth();
@@ -18,6 +19,7 @@ const {
   fetchDatabase,
   addSupabaseData,
   deletedSupabaseData,
+  editedSupabaseData,
   TABLE_NAME,
 } = useDatabase();
 
@@ -55,11 +57,15 @@ const fetchRealtimeData = () => {
             const { id } = payload.old;
             messages.value = messages.value.filter((item) => item.id !== id);
           }
+          if (payload.eventType === "UPDATE") {
+            const { id, message } = payload.new;
+            messages.value = messages.value.map((item) =>
+              item.id === id ? { ...item, message } : item,
+            );
+          }
         },
       )
       .subscribe(); // subscribeで初期化作業が必要
-
-    // この部分はNuxtでは使用しない。beforeUnmount内で実行する場合は、onBeforeUnmountフックを使用してください。
   } catch (error) {
     console.error(error);
   }
@@ -87,6 +93,15 @@ const onSubmitNewMessage = (event) => {
 
 const onMessageDeleted = async (id: string) => {
   await deletedSupabaseData(id);
+};
+
+const onMessageEdited = (id: string) => {
+  editingMessageId.value = id;
+};
+
+const onSaveEditedMessage = async (id: string, newMessage: string) => {
+  await editedSupabaseData(id, newMessage); // DBの更新ロジックを実装する
+  editingMessageId.value = ""; // 編集モードを終了
 };
 
 watch(messages, () => {
@@ -144,7 +159,17 @@ watch(messages, () => {
             <p class="absolute left-0 -top-4 z-10 text-[10px]">
               {{ item.nickName }}
             </p>
-            <p>{{ item.message }}</p>
+            <div v-if="item.id !== editingMessageId">
+              <p>{{ item.message }}</p>
+            </div>
+            <div v-else>
+              <input
+                type="text"
+                class="border border-gray-400 w-full p-2 rounded w-full"
+                v-model="item.message"
+                @blur="onSaveEditedMessage(item.id, item.message)"
+              />
+            </div>
             <p class="absolute text-right text-[10px] -bottom-4 right-0">
               {{ dateToString(item.createdAt, "YYYY/MM/DD HH:mm") }}
             </p>
@@ -154,6 +179,13 @@ watch(messages, () => {
               v-if="item.nickName === profileFromGithub.nickName"
             >
               削除
+            </button>
+            <button
+              class="absolute text-[10px] left-7 -bottom-4"
+              @click="onMessageEdited(item.id)"
+              v-if="item.nickName === profileFromGithub.nickName"
+            >
+              編集
             </button>
           </div>
         </div>

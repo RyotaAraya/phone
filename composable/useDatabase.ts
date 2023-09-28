@@ -32,6 +32,13 @@ export default function useSupabase() {
       console.error(error);
     }
   };
+  const editedSupabaseData = async (id: string, text: string) => {
+    try {
+      await supabase.from(TABLE_NAME).update({ message: text }).match({ id }); // 指定したIDの行を更新
+    } catch (error) {
+      console.error(error);
+    }
+  };
   const addSupabaseData = async ({
     message,
     avatarUrl,
@@ -52,5 +59,6 @@ export default function useSupabase() {
     fetchDatabase,
     addSupabaseData,
     deletedSupabaseData,
+    editedSupabaseData,
   };
 }
