@@ -1,25 +1,24 @@
 import { ref, onMounted } from "vue";
 import { Database } from "@/types/schema";
+import { SupabaseClient } from "@supabase/supabase-js";
 
 export default function useSupabase() {
   const nuxtApp = useNuxtApp();
-  const supabase = nuxtApp.$supabase;
+  const supabase = nuxtApp.$supabase as SupabaseClient;
 
   const data = ref<Database[] | null>(null);
-  const error = ref<Error | null>(null);
 
   const TABLE_NAME = "messages";
 
   const fetchDatabase = async () => {
     try {
       const { data: fetchedData } = await supabase
-        .from(TABLE_NAME)
-        .select("*")
-        .order("createdAt");
+        .from(TABLE_NAME) // messagesテーブルを指定
+        .select("*") // 全てのカラムを取得
+        .order("createdAt"); // createdAtカラムでソート
       data.value = fetchedData;
-    } catch (err) {
-      error.value = err;
-      console.error(err);
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -43,19 +42,20 @@ export default function useSupabase() {
     message,
     avatarUrl,
     nickName,
-  }: Pick<Database, "message" | "nickName" | "avatarUrl">) => {
+  }: Pick<
+    Database["public"]["Tables"]["messages"]["Row"],
+    "message" | "nickName" | "avatarUrl"
+  >) => {
     try {
       await supabase.from(TABLE_NAME).insert({ message, avatarUrl, nickName });
-    } catch (err) {
-      error.value = err;
-      console.error(err);
+    } catch (error) {
+      console.error(error);
     }
   };
 
   return {
     TABLE_NAME,
     data,
-    error,
     fetchDatabase,
     addSupabaseData,
     deletedSupabaseData,

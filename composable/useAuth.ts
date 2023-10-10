@@ -1,9 +1,9 @@
-import { Session } from "@supabase/supabase-js";
+import { Session, SupabaseClient } from "@supabase/supabase-js";
 import { onMounted, ref, computed } from "vue";
 
 const useAuth = () => {
   const nuxtApp = useNuxtApp();
-  const supabase = nuxtApp.$supabase;
+  const supabase = nuxtApp.$supabase as SupabaseClient;
   const session = ref<Session | null>(null);
   const error = ref<string>("");
 
