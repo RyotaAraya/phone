@@ -25,6 +25,7 @@ export default defineNuxtConfig({
   },
   modules: ["@nuxtjs/tailwindcss"],
   css: ["@/assets/css/main.css"],
+  // 本来はKEYの設定はサーバサイドで行うべきですが、今回は簡略化のためにクライアントサイドで設定します。
   runtimeConfig: {
     public: {
       SUPABASE_URL: process.env.SUPABASE_URL,
