@@ -1,5 +1,5 @@
 import { Session } from "@supabase/supabase-js";
-import { onMounted, ref, Ref, computed } from "vue";
+import { onMounted, ref, computed } from "vue";
 
 const useAuth = () => {
   const nuxtApp = useNuxtApp();

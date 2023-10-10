@@ -31,6 +31,7 @@
   "dependencies": {
     "@nuxtjs/tailwindcss": "^6.8.0",
     "@supabase/supabase-js": "^2.33.2",
-    "dayjs": "^1.11.10"
+    "dayjs": "^1.11.10",
+    "supabase": "^1.100.1"
   }
 }

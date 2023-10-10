@@ -77,7 +77,7 @@ yarn preview
 4. `.env.example` を `.env` にリネーム
 5. `.env` の `NUXT_PUBLIC_SUPABASE_URL` と `NUXT_PUBLIC_SUPABASE_KEY` に、コピーした値を貼り付け
 6. テーブルを作成
-7. `chat-app` の名前でテーブルを作成
+7. `messages` の名前でテーブルを作成
 8. Enable Row Level Security (RLS) と Enable Row Level Security (RLS) にチェック
     - ※本番環境の際には正しいセキュリティの設定を行うこと
 9. ![2023-09-27-23-00-48](https://github.com/redamoon/supabase-nuxt3-chat/assets/2642197/6eb050ba-9724-4e8f-a017-cf2ccf0d559b)

@@ -1,5 +1,5 @@
 import { ref, onMounted } from "vue";
-import { Database } from "@/types/supabase";
+import { Database } from "@/types/schema";
 
 export default function useSupabase() {
   const nuxtApp = useNuxtApp();
@@ -8,7 +8,7 @@ export default function useSupabase() {
   const data = ref<Database[] | null>(null);
   const error = ref<Error | null>(null);
 
-  const TABLE_NAME = "chat-app";
+  const TABLE_NAME = "messages";
 
   const fetchDatabase = async () => {
     try {
