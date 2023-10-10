@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { Database } from "@/types/supabase";
+import type { SupabaseClient } from "@supabase/supabase-js";
+import { Database } from "@/types/schema";
 import { ref, onMounted, watch } from "vue";
 import { dateToString } from "@/utils/dateToString";
 
@@ -7,12 +8,12 @@ import useDatabase from "@/composable/useDatabase";
 import useAuth from "@/composable/useAuth";
 
 const nuxtApp = useNuxtApp();
-const supabase = nuxtApp.$supabase;
+const supabase = nuxtApp.$supabase as SupabaseClient;
 
 const scrollAreaRef = ref(null);
 const editingMessageId = ref("");
 const inputText = ref("");
-const messages = ref<Database[]>([]);
+const messages = ref<Database["public"]["Tables"]["messages"]["Row"][]>([]);
 const { session: isLogin, profileFromGithub } = useAuth();
 const {
   data,
@@ -80,11 +81,12 @@ onMounted(async () => {
   scrollToBottom();
 });
 
-const onChangeInputText = (event) => {
-  inputText.value = event.target.value;
+const onChangeInputText = (event: Event) => {
+  const target = event.target as HTMLInputElement;
+  inputText.value = target.value;
 };
 
-const onSubmitNewMessage = (event) => {
+const onSubmitNewMessage = (event: Event) => {
   event.preventDefault();
   if (!inputText.value) return;
   addSupabaseData({ message: inputText.value, ...profileFromGithub.value });

@@ -6,7 +6,9 @@ export default function useSupabase() {
   const nuxtApp = useNuxtApp();
   const supabase = nuxtApp.$supabase as SupabaseClient;
 
-  const data = ref<Database[] | null>(null);
+  const data = ref<Database["public"]["Tables"]["messages"]["Row"][] | null>(
+    null,
+  );
 
   const TABLE_NAME = "messages";
 
