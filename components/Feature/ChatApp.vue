@@ -167,9 +167,9 @@ watch(messages, () => {
             <div v-else>
               <input
                 type="text"
-                class="border border-gray-400 w-full p-2 rounded w-full"
+                class="border border-gray-400 p-2 rounded w-full"
                 v-model="item.message"
-                @blur="onSaveEditedMessage(item.id, item.message)"
+                @blur="onSaveEditedMessage(item.id, item.message as string)"
               />
             </div>
             <p class="absolute text-right text-[10px] -bottom-4 right-0">
