@@ -104,8 +104,8 @@ CREATE TABLE messages (
 | Name       |Type|Default Value|Primary|
 |------------|---|---|---|
 | id         |uuid|uuid_generate_v4()|○|
-| created_at |timestamp|now()|○|
+| createdAt |timestamp|now()|○|
 | messaage   |text|||
 | nickName   |text|||
-|avatarUrl   |text|||
+| avatarUrl   |text|||
 
