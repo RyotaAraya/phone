@@ -89,9 +89,21 @@ yarn preview
     - WITH CHECK expression: `true`
 11. `npm run dev` でローカルサーバを起動
 
+SQLの場合は以下を実行することでテーブルを作成できます。
+
+```sql
+CREATE TABLE messages (
+    createdAt TIMESTAMPTZ DEFAULT now() NOT NULL,
+    message TEXT NOT NULL,
+    nickName TEXT,
+    avatarUrl TEXT,
+    id UUID DEFAULT uuid_generate_v4() PRIMARY KEY
+);
+```
+
 | Name       |Type|Default Value|Primary|
 |------------|---|---|---|
-| id         |uuid|gen_random_uuid()|○|
+| id         |uuid|uuid_generate_v4()|○|
 | created_at |timestamp|now()|○|
 | messaage   |text|||
 | nickName   |text|||
